@@ -15,7 +15,7 @@ interface CurrencyServiceInterface
     /**
      * @param string $currency
      * @param Carbon $date
-     * @return array<array{code:string,name:string,rate:float}>
+     * @return float
      */
     public function currencyRate(string $currency, Carbon $date): float;
 
