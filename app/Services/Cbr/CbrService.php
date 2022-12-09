@@ -49,27 +49,12 @@ class CbrService implements CurrencyServiceInterface
     {
         $date = $this->formatDate($date);
         return Cache::rememberForever("cbr.rates.$date", function () use ($date) {
-            $result = $this->client->rates($date);
-            return $this->formatRates($result);
+            return $this->client->rates($date);
         });
     }
 
     private function formatDate(Carbon $date): string
     {
         return $date->format('Y-m-d');
-    }
-
-    /**
-     * @template  rate
-     * @param array<array{Vname:string,Vnom:string,Vcurs:string,Vcode:string,VchCode:string}> $rates
-     * @return array<array{code:string,name:string,rate:float}>
-     */
-    private function formatRates(array $rates): array
-    {
-        return array_map(fn($rate)=>[
-            'code' => $rate['VchCode'],
-            'name' => trim($rate['Vname']),
-            'rate' => (float)$rate['Vcurs'],
-        ], $rates);
     }
 }

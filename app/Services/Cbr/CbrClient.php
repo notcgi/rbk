@@ -20,7 +20,8 @@ class CbrClient implements CurrencyClientInterface
 
     /**
      * @param string $date
-     * @return  array<array{Vname:string,Vnom:string,Vcurs:string,Vcode:string,VchCode:string}> $rates
+     * @return array<array{code:string,name:string,rate:float}>
+     * @throws \Exception
      */
     public function rates(string $date): array
     {
@@ -30,9 +31,25 @@ class CbrClient implements CurrencyClientInterface
                 "On_date" => $date
             ]);
             $result = simplexml_load_string($result->GetCursOnDateResult->any);
-            return json_decode(json_encode($result), true)['ValuteData']['ValuteCursOnDate'];
+            $result = json_decode(json_encode($result), true)['ValuteData']['ValuteCursOnDate'];
+            return $this->formatRates($result);
         } catch (\Exception $exception) {
             throw new \Exception('CBR Server Error', previous: $exception);
         }
+    }
+
+
+    /**
+     * @template  rate
+     * @param array<array{Vname:string,Vnom:string,Vcurs:string,Vcode:string,VchCode:string}> $rates
+     * @return array<array{code:string,name:string,rate:float}>
+     */
+    private function formatRates(array $rates): array
+    {
+        return array_map(fn($rate)=>[
+            'code' => $rate['VchCode'],
+            'name' => trim($rate['Vname']),
+            'rate' => (float)$rate['Vcurs'],
+        ], $rates);
     }
 }
