@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: RBK
+  description: RBK
+  version: 1.0.0
+servers:
+  - url: 'http://localhost'
+paths:
+  '/rate':
+    summary: list
+    parameters:
+      - name: date
+        in: query
+        schema:
+          type: string
+          default: today
+        examples:
+          today:
+            value: today
+          date:
+            value: 2022-12-09
+    get:
+      responses:
+        200:
+          description: list of available currencies with rate
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RateList'
+        422:
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  '/rate/{base}/{to}':
+    summary: list
+    parameters:
+      - name: base
+        in: path
+        schema:
+          type: string
+          example: RUR
+      - name: to
+        in: path
+        schema:
+          type: string
+          example: USD
+      - name: date
+        in: query
+        schema:
+          type: string
+          default: today
+        examples:
+          today:
+            value: today
+          date:
+            value: 2022-12-09
+    get:
+      responses:
+        200:
+          description: exchange rate for pair
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pair'
+        422:
+          $ref: "#/components/responses/UnprocessableEntity"
+
+components:
+  responses:
+    UnprocessableEntity:
+      description: Incorrect input data
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+
+  schemas:
+    RateList:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Доллар США
+        code:
+          type: string
+          example: USD
+        rate:
+          type: number
+          example: 60.1452
+    Pair:
+      type: object
+      properties:
+        rate:
+          type: number
+          example: 60.1523
+        change:
+          type: number
+          example: -0.2341
