@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Services\Cbr;
+namespace App\Services\CurrencyService;
 
 use App\Exceptions\CurrencyClientException;
 use App\Exceptions\CurrencyServiceException;
+use App\Services\CurrencyClient\CurrencyClientInterface;
 use Cache;
 use Illuminate\Support\Carbon;
 

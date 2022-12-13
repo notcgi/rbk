@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Cbr;
+namespace App\Services\CurrencyService;
 
 use Illuminate\Support\Carbon;
 

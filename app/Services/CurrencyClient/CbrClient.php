@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Cbr;
+namespace App\Services\CurrencyClient;
 
 use App\Exceptions\CurrencyClientException;
 use Illuminate\Support\Carbon;

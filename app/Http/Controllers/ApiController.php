@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Cbr\CurrencyServiceInterface;
+use App\Services\CurrencyService\CurrencyServiceInterface;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
