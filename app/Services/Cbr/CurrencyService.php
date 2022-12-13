@@ -7,10 +7,11 @@ use App\Exceptions\CurrencyServiceException;
 use Cache;
 use Illuminate\Support\Carbon;
 
-class CbrService implements CurrencyServiceInterface
+class CurrencyService implements CurrencyServiceInterface
 {
+    public const BASE_CURRENCY = 'RUR';
     public function __construct(
-        private CbrClient $client
+        private CurrencyClientInterface $client
     ) {}
 
     /**
@@ -24,9 +25,9 @@ class CbrService implements CurrencyServiceInterface
         if ($base == $to) {
             $this->currencyRate($to, $date); // to throw Exception if currency not available
             return 1.0;
-        } elseif ($base == 'RUR')
+        } elseif ($base == self::BASE_CURRENCY)
             return $this->currencyRate($to, $date);
-        elseif ($to == 'RUR')
+        elseif ($to == self::BASE_CURRENCY)
             return 1/$this->currencyRate($base, $date);
         else
             return $this->currencyRate($to, $date)/$this->currencyRate($base, $date);

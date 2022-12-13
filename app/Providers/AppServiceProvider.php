@@ -2,14 +2,16 @@
 
 namespace App\Providers;
 
-use App\Services\Cbr\CbrService;
+use App\Services\Cbr\CbrClient;
+use App\Services\Cbr\CurrencyClientInterface;
+use App\Services\Cbr\CurrencyService;
 use App\Services\Cbr\CurrencyServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
-        CurrencyServiceInterface::class => CbrService::class,
+        CurrencyServiceInterface::class => CurrencyService::class,
     ];
 
     /**
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(CurrencyServiceInterface::class,fn($app) => $app->make(CbrService::class));
+        $this->app->bind(CurrencyServiceInterface::class,fn($app) => $app->make(CurrencyService::class));
+        $this->app->bind(CurrencyClientInterface::class,fn($app) => $app->make(CbrClient::class));
     }
 }
