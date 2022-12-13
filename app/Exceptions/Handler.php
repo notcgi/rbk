@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -57,7 +56,7 @@ class Handler extends ExceptionHandler
         if ($preparedException instanceof HttpException) {
             return response(
                 [
-                    'message' => Response::$statusTexts[$preparedException->getStatusCode()]??'Unknown error',
+                    'message' => $preparedException->getMessage(),
                     'status' => $preparedException->getStatusCode()
                 ],
                 $preparedException->getStatusCode(),

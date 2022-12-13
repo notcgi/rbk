@@ -3,13 +3,10 @@ FROM php:8.0-fpm AS base
 WORKDIR "/app"
 
 RUN apt update
-RUN apt install -y zip unzip libxml2-dev libpq-dev
+RUN apt install -y zip unzip libxml2-dev
 
 RUN docker-php-ext-install soap \
 	&& docker-php-ext-enable soap
-
-RUN docker-php-ext-install pdo_pgsql \
-	&& docker-php-ext-enable pdo_pgsql
 
 RUN pecl install xdebug \
 	&& docker-php-ext-enable xdebug

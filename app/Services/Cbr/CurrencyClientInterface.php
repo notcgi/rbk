@@ -2,11 +2,14 @@
 
 namespace App\Services\Cbr;
 
+
+use Illuminate\Support\Carbon;
+
 interface CurrencyClientInterface
 {
     /**
-     * @param string $date
+     * @param Carbon $date
      * @return array<array{code:string,name:string,rate:float}>
      */
-    public function rates(string $date): array;
+    public function rates(Carbon $date): array;
 }

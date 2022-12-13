@@ -2,6 +2,8 @@
 
 namespace App\Services\Cbr;
 
+use App\Exceptions\CurrencyClientException;
+use Illuminate\Support\Carbon;
 use SoapClient;
 
 class CbrClient implements CurrencyClientInterface
@@ -10,31 +12,35 @@ class CbrClient implements CurrencyClientInterface
 
     public function __construct()
     {
-        $this->client = new SoapClient(
-            route('cbr.daily.info',['WSDL']),
-            [
-                'soap_version' => SOAP_1_2
-            ]
-        );
+        try {
+            $this->client = new SoapClient(
+                route('cbr.daily.info',['WSDL']),
+                [
+                    'soap_version' => SOAP_1_2
+                ]
+            );
+        } catch (\SoapFault $exception) {
+            throw new CurrencyClientException(previous: $exception);
+        }
     }
 
     /**
-     * @param string $date
+     * @param Carbon $date
      * @return array<array{code:string,name:string,rate:float}>
      * @throws \Exception
      */
-    public function rates(string $date): array
+    public function rates(Carbon $date): array
     {
         try {
 
             $result = $this->client->GetCursOnDate([
-                "On_date" => $date
+                "On_date" => $this->formatDate($date)
             ]);
             $result = simplexml_load_string($result->GetCursOnDateResult->any);
             $result = json_decode(json_encode($result), true)['ValuteData']['ValuteCursOnDate'];
             return $this->formatRates($result);
         } catch (\Exception $exception) {
-            throw new \Exception('CBR Server Error', previous: $exception);
+            throw new CurrencyClientException(previous: $exception);
         }
     }
 
@@ -51,5 +57,11 @@ class CbrClient implements CurrencyClientInterface
             'name' => trim($rate['Vname']),
             'rate' => (float)$rate['Vcurs'],
         ], $rates);
+    }
+
+
+    private function formatDate(Carbon $date): string
+    {
+        return $date->format('Y-m-d');
     }
 }

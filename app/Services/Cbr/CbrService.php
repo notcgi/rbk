@@ -2,6 +2,7 @@
 
 namespace App\Services\Cbr;
 
+use App\Exceptions\CurrencyClientException;
 use App\Exceptions\CurrencyServiceException;
 use Cache;
 use Illuminate\Support\Carbon;
@@ -29,15 +30,17 @@ class CbrService implements CurrencyServiceInterface
             return 1/$this->currencyRate($base, $date);
         else
             return $this->currencyRate($to, $date)/$this->currencyRate($base, $date);
-
     }
 
     public function currencyRate(string $currency, Carbon $date): float
     {
         $rates = $this->rates($date);
+
         $rates = array_values(array_filter($rates, fn($rate) => $rate['code'] == $currency));
-        throw_if(empty($rates), new CurrencyServiceException('Unavailable currency', CurrencyServiceException::USER_ERROR));
-        throw_if(count($rates)>1, new CurrencyServiceException('Internal Error',CurrencyServiceException::SERVER_ERROR));
+
+        throw_if(empty($rates), new CurrencyServiceException('Unavailable currency'));
+        throw_if(count($rates)>1, new CurrencyClientException());
+
         return $rates[0]['rate'];
     }
 
@@ -47,14 +50,13 @@ class CbrService implements CurrencyServiceInterface
      */
     public function rates(Carbon $date): array
     {
-        $date = $this->formatDate($date);
-        return Cache::rememberForever("cbr.rates.$date", function () use ($date) {
+        return Cache::rememberForever($this->getCacheKey($date), function () use ($date) {
             return $this->client->rates($date);
         });
     }
 
-    private function formatDate(Carbon $date): string
+    private function getCacheKey(Carbon $date): string
     {
-        return $date->format('Y-m-d');
+        return "cbr.rates.".$date->format('Y-m-d');
     }
 }
