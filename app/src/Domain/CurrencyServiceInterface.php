@@ -27,4 +27,12 @@ interface CurrencyServiceInterface
      * @return float
      */
     public function pairRate(string $base, string $to, DateTime $date):float;
+
+    /**
+     * @param string $base
+     * @param string $to
+     * @param DateTime $date
+     * @return float
+     */
+    public function previousDate(DateTime $date):DateTime;
 }

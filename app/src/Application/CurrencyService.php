@@ -53,4 +53,23 @@ class CurrencyService implements CurrencyServiceInterface
     {
         return $this->client->rates($date);
     }
+
+    /**
+     * Map to get previous trading day (skipping weekend)
+     */
+    private const PREVIOUS_DAY_MAP = [
+        1=>3,
+        2=>1,
+        3=>1,
+        4=>1,
+        5=>1,
+        6=>1,
+        7=>2,
+    ];
+    public function previousDate(DateTime $date): DateTime
+    {
+        $date = clone $date;
+        $subDays = self::PREVIOUS_DAY_MAP[(int)$date->format('N')];
+        return $date->modify("-$subDays day");
+    }
 }

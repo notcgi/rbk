@@ -10,19 +10,6 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class ApiController extends BaseController
 {
-    /**
-     * Map to get previous trading day (skipping weekend)
-     */
-    private const PREVIOUS_DAY_MAP = [
-      1=>3,
-      2=>1,
-      3=>1,
-      4=>1,
-      5=>1,
-      6=>1,
-      7=>2,
-    ];
-
     public function __construct(
         private CurrencyServiceInterface $service
     ) {}
@@ -48,10 +35,7 @@ class ApiController extends BaseController
     public function pair(string $base, string $to)
     {
         $date = $this->getDateFromRequest();
-
-        $previousDate = clone $date;
-        $subDays = self::PREVIOUS_DAY_MAP[(int)$previousDate->format('N')];
-        $previousDate->modify("-$subDays day");
+        $previousDate= $this->service->previousDate($date);
 
         return [
             'rate' => $rate = $this->service->pairRate($base, $to, $date),
