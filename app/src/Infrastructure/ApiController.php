@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\src\Infrastructure;
 
-use App\Services\CurrencyService\CurrencyServiceInterface;
+use App\src\Domain\CurrencyServiceInterface;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
@@ -33,7 +33,7 @@ class ApiController extends BaseController
         return $this->service->rates($date);
     }
 
-    private function getDateFromRequest(): Carbon
+    private function getDateFromRequest(): \DateTime
     {
         try {
             $date = new Carbon(request('date', 'today'));
@@ -42,15 +42,17 @@ class ApiController extends BaseController
         }
         if ($date > now())
             throw new UnprocessableEntityHttpException('Incorrect date');
-        $date->setTime(0,0);
-        return $date;
+        return $date->setTime(0,0)->toDate();
     }
 
     public function pair(string $base, string $to)
     {
         $date = $this->getDateFromRequest();
+
         $previousDate = clone $date;
-        $previousDate->subDays(self::PREVIOUS_DAY_MAP[$previousDate->dayOfWeekIso]);
+        $subDays = self::PREVIOUS_DAY_MAP[(int)$previousDate->format('N')];
+        $previousDate->modify("-$subDays day");
+
         return [
             'rate' => $rate = $this->service->pairRate($base, $to, $date),
             'change' => round($rate - $this->service->pairRate($base, $to, $previousDate),13) // round to remove calculation error (0.000000000000001)

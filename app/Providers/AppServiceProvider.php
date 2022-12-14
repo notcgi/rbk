@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\CurrencyClient\CbrClient;
-use App\Services\CurrencyClient\CurrencyClientInterface;
-use App\Services\CurrencyService\CurrencyService;
-use App\Services\CurrencyService\CurrencyServiceInterface;
+use App\src\Application\CurrencyService;
+use App\src\Domain\CurrencyClientInterface;
+use App\src\Domain\CurrencyServiceInterface;
+use App\src\Infrastructure\CbrClient;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

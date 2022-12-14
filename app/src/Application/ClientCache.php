@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services\CurrencyClient;
+namespace App\src\Application;
 
+use App\src\Domain\CurrencyClientInterface;
 use Illuminate\Contracts\Cache\Repository;
 
 /**
- * @method rates(\Illuminate\Support\Carbon $date)
+ * @method rates(\DateTime $date)
  */
 class ClientCache
 {

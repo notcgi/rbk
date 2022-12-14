@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Services\CurrencyClient;
+namespace App\src\Infrastructure;
 
 use App\Exceptions\CurrencyClientException;
-use Illuminate\Support\Carbon;
+use App\src\Domain\CurrencyClientInterface;
+use DateTime;
 use SoapClient;
 
 class CbrClient implements CurrencyClientInterface
@@ -25,11 +26,11 @@ class CbrClient implements CurrencyClientInterface
     }
 
     /**
-     * @param Carbon $date
+     * @param DateTime $date
      * @return array<array{code:string,name:string,rate:float}>
      * @throws \Exception
      */
-    public function rates(Carbon $date): array
+    public function rates(DateTime $date): array
     {
         try {
 
@@ -60,7 +61,7 @@ class CbrClient implements CurrencyClientInterface
     }
 
 
-    private function formatDate(Carbon $date): string
+    private function formatDate(DateTime $date): string
     {
         return $date->format('Y-m-d');
     }

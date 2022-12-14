@@ -3,8 +3,8 @@
 namespace Tests\Unit;
 
 use App\Exceptions\CurrencyServiceException;
-use App\Services\CurrencyClient\CbrClient;
-use App\Services\CurrencyService\CurrencyServiceInterface;
+use App\src\Domain\CurrencyServiceInterface;
+use App\src\Infrastructure\CbrClient;
 use Tests\TestCase;
 
 class CbrTest extends TestCase

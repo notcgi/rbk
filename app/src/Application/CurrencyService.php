@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\CurrencyService;
+namespace App\src\Application;
 
 use App\Exceptions\CurrencyClientException;
 use App\Exceptions\CurrencyServiceException;
-use App\Services\CurrencyClient\ClientCache;
-use Illuminate\Support\Carbon;
+use App\src\Domain\CurrencyServiceInterface;
+use DateTime;
 
 class CurrencyService implements CurrencyServiceInterface
 {
@@ -17,10 +17,10 @@ class CurrencyService implements CurrencyServiceInterface
     /**
      * @param string $base
      * @param string $to
-     * @param Carbon $date
+     * @param DateTime $date
      * @return float
      */
-    public function pairRate(string $base, string $to, Carbon $date): float
+    public function pairRate(string $base, string $to, DateTime $date): float
     {
         if ($base == $to) {
             $this->currencyRate($to, $date); // to throw Exception if currency not available
@@ -33,7 +33,7 @@ class CurrencyService implements CurrencyServiceInterface
             return $this->currencyRate($to, $date)/$this->currencyRate($base, $date);
     }
 
-    public function currencyRate(string $currency, Carbon $date): float
+    public function currencyRate(string $currency, DateTime $date): float
     {
         $rates = $this->rates($date);
 
@@ -46,16 +46,11 @@ class CurrencyService implements CurrencyServiceInterface
     }
 
     /**
-     * @param Carbon $date
+     * @param DateTime $date
      * @return array<array{code:string,name:string,rate:float}>
      */
-    public function rates(Carbon $date): array
+    public function rates(DateTime $date): array
     {
         return $this->client->rates($date);
-    }
-
-    private function getCacheKey(Carbon $date): string
-    {
-        return "cbr.rates.".$date->format('Y-m-d');
     }
 }
