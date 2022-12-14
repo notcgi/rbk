@@ -3,9 +3,8 @@
 namespace App\src\Infrastructure;
 
 use App\src\Domain\CurrencyServiceInterface;
-use Carbon\Exceptions\InvalidFormatException;
+use DateTime;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Carbon;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class ApiController extends BaseController
@@ -23,13 +22,13 @@ class ApiController extends BaseController
     private function getDateFromRequest(): \DateTime
     {
         try {
-            $date = new Carbon(request('date', 'today'));
-        } catch (InvalidFormatException $exception) {
+            $date = new DateTime(request('date', 'today'));
+        } catch (\Exception $e) {
             throw new UnprocessableEntityHttpException('Incorrect date format');
         }
-        if ($date > now())
+        if ($date > new DateTime())
             throw new UnprocessableEntityHttpException('Incorrect date');
-        return $date->setTime(0,0)->toDate();
+        return $date->setTime(0,0);
     }
 
     public function pair(string $base, string $to)
