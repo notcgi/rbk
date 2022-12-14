@@ -2,9 +2,9 @@
 
 namespace App\src\Domain;
 
-use App\Exceptions\CurrencyClientException;
-use App\Exceptions\CurrencyServiceException;
 use App\src\Application\ClientCache;
+use App\src\Application\CurrencyClientException;
+use App\src\Application\CurrencyServiceException;
 use DateTime;
 
 class CurrencyService implements CurrencyServiceInterface

@@ -4,10 +4,9 @@ namespace App\src\Infrastructure;
 
 use App\src\Domain\CurrencyServiceInterface;
 use DateTime;
-use Illuminate\Routing\Controller as BaseController;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class ApiController extends BaseController
+class ApiController
 {
     public function __construct(
         private CurrencyServiceInterface $service

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Exceptions\CurrencyServiceException;
+use App\src\Application\CurrencyServiceException;
 use App\src\Domain\CurrencyServiceInterface;
 use App\src\Infrastructure\CbrClient;
 use Tests\TestCase;
