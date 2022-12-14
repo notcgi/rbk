@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Exceptions\CurrencyServiceException;
+use App\Services\CurrencyClient\CbrClient;
 use App\Services\CurrencyService\CurrencyServiceInterface;
 use Tests\TestCase;
 
@@ -35,8 +36,11 @@ class CbrTest extends TestCase
     }
     public function testRatesCache()
     {
-        $this->service->rates(now());
-        self::assertNotNull(\Cache::get('cbr.rates.'.now()->format('Y-m-d')));
+        $this->service->rates(now()->setTime(0,0));
+        self::assertNotNull(\Cache::get(
+            CbrClient::class.'.'.
+            'rates.'.
+            json_encode([now()->setTime(0,0)])));
     }
 
     public function testUnavailableCurrencyRate()

@@ -42,6 +42,7 @@ class ApiController extends BaseController
         }
         if ($date > now())
             throw new UnprocessableEntityHttpException('Incorrect date');
+        $date->setTime(0,0);
         return $date;
     }
 

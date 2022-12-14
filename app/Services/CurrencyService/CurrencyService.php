@@ -4,15 +4,14 @@ namespace App\Services\CurrencyService;
 
 use App\Exceptions\CurrencyClientException;
 use App\Exceptions\CurrencyServiceException;
-use App\Services\CurrencyClient\CurrencyClientInterface;
-use Cache;
+use App\Services\CurrencyClient\ClientCache;
 use Illuminate\Support\Carbon;
 
 class CurrencyService implements CurrencyServiceInterface
 {
     public const BASE_CURRENCY = 'RUR';
     public function __construct(
-        private CurrencyClientInterface $client
+        private ClientCache $client
     ) {}
 
     /**
@@ -52,9 +51,7 @@ class CurrencyService implements CurrencyServiceInterface
      */
     public function rates(Carbon $date): array
     {
-        return Cache::rememberForever($this->getCacheKey($date), function () use ($date) {
-            return $this->client->rates($date);
-        });
+        return $this->client->rates($date);
     }
 
     private function getCacheKey(Carbon $date): string
