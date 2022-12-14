@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\src\Application\CurrencyService;
-use App\src\Domain\CurrencyClientInterface;
+use App\src\Application\CurrencyClientInterface;
+use App\src\Domain\CurrencyService;
 use App\src\Domain\CurrencyServiceInterface;
 use App\src\Infrastructure\CbrClient;
 use Illuminate\Support\ServiceProvider;

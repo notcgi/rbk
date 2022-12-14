@@ -2,7 +2,6 @@
 
 namespace App\src\Application;
 
-use App\src\Domain\CurrencyClientInterface;
 use Illuminate\Contracts\Cache\Repository;
 
 /**

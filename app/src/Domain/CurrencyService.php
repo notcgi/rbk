@@ -1,10 +1,10 @@
 <?php
 
-namespace App\src\Application;
+namespace App\src\Domain;
 
 use App\Exceptions\CurrencyClientException;
 use App\Exceptions\CurrencyServiceException;
-use App\src\Domain\CurrencyServiceInterface;
+use App\src\Application\ClientCache;
 use DateTime;
 
 class CurrencyService implements CurrencyServiceInterface

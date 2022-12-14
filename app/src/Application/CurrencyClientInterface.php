@@ -1,6 +1,6 @@
 <?php
 
-namespace App\src\Domain;
+namespace App\src\Application;
 
 use DateTime;
 

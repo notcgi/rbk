@@ -3,7 +3,7 @@
 namespace App\src\Infrastructure;
 
 use App\Exceptions\CurrencyClientException;
-use App\src\Domain\CurrencyClientInterface;
+use App\src\Application\CurrencyClientInterface;
 use DateTime;
 use SoapClient;
 
